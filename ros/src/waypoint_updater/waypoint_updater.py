@@ -3,7 +3,9 @@
 import rospy
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
+from scipy.spatial import KDTree
 
+import numpy as np
 import math
 
 '''
@@ -21,7 +23,7 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
+LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number
 
 
 class WaypointUpdater(object):
@@ -30,23 +32,67 @@ class WaypointUpdater(object):
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
-
+        # rospy.Subscriber('/traffic_waypoint', Waypoint, self.traffic_cb)
+        # rospy.Subscriber('/obstacle_waypoint', Waypoint, self.obstacle_cb)
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
 
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
         # TODO: Add other member variables you need below
+        self.pose = None
+        self.base_waypoints = None
+        self.waypoints_2d   = None
+        self.waypoint_tree  = None
 
-        rospy.spin()
+        self.loop()
+
+    def loop(self):
+        rate = rospy.Rate(50) # can go as low as 30 Hz
+        while not rospy.is_shutdown():
+            if not ((self.pose is None) or (self.waypoint_tree is None)):
+                closest_waypoint_idx = self.get_closest_waypoint_idx()
+                self.publish_waypoints(closest_waypoint_idx)
+            rate.sleep()
+
+    def get_closest_waypoint_idx(self):
+        x = self.pose.pose.position.x
+        y = self.pose.pose.position.y
+        
+        # the closest point index
+        closest_idx = self.waypoint_tree.query([x, y], 1)[1]
+        
+        # Variables to check points is infront of the car
+        closest_coord = self.waypoints_2d[closest_idx]
+        prev_coord    = self.waypoints_2d[closest_idx - 1]
+        
+        # Equ. to make sure that points is infront (dot producet)
+        cl_vect   = np.array(closest_coord)
+        prev_vect = np.array(prev_coord)
+        pos_vect  = np.array([x, y])
+
+        val = np.dot(cl_vect, pos_vect - cl_vect)
+        # find the dot product to tell if the point is infront or behind the car
+        # +ve >> front && -ve >> behind
+        if val > 0:
+            closest_idx = (closest_idx+1) % len(self.waypoints_2d)
+        return closest_idx
+
+    def publish_waypoints(self, closest_idx):
+        lane = Lane()
+        lane.header    = self.base_waypoints.header
+        lane.waypoints = self.base_waypoints.waypoints[closest_idx : closest_idx + LOOKAHEAD_WPS]
+        self.final_waypoints_pub.publish(lane)
 
     def pose_cb(self, msg):
-        # TODO: Implement
-        pass
-
+        self.pose = msg # stores car poses
+        
+    # Gets the closest waypoints to the car using KDTree DataSutruct to searchs closest spatial points after converting to points
     def waypoints_cb(self, waypoints):
-        # TODO: Implement
-        pass
+        self.base_waypoints = waypoints
+        if self.waypoints_2d is None: # make sure that it is initialized before the subscriber is
+            self.waypoints_2d  = [[waypoint.pose.pose.position.x,waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
+            self.waypoint_tree = KDTree(self.waypoints_2d)
 
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement
