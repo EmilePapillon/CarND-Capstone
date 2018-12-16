@@ -32,11 +32,9 @@ MAX_DECEL=.5
 class WaypointUpdater(object):
     def __init__(self):
         rospy.init_node('waypoint_updater')
-
         #add subscriber to /base_waypoints and /current_pose for Partial version
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
-
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
         #self.sub2 = rospy.Subscriber('/obstacle_waypoint', ???, self.obstacle_cb )
@@ -75,10 +73,11 @@ class WaypointUpdater(object):
         prev_vect = np.array(prev_coord)
         pos_vect=  np.array([x,y])
 
-        val = np.dot(cl_vect-prev_vect, pos_vect-cl_vect) 
+        val = np.dot(cl_vect-prev_vect, pos_vect-cl_vect)
 
         if val>0:
             closest_idx=(closest_idx-1) % len(self.waypoints_2d)
+        rospy.loginfo('Closest_idx get')
         return closest_idx
 
 
@@ -128,8 +127,8 @@ class WaypointUpdater(object):
         rospy.loginfo('pose_cb is called')
         self.pose = msg
 
-    def waypoints_cb(self, waypoints): 
-        self.base_waypoints = waypoints 
+    def waypoints_cb(self, waypoints):
+        self.base_lane = waypoints
         if not self.waypoints_2d:
             self.waypoints_2d = [[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoint_tree = KDTree(self.waypoints_2d)
