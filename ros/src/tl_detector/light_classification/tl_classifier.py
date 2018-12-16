@@ -77,27 +77,22 @@ class TLClassifier(object):
 
 
         clt = KMeans(n_clusters = 5)
-        clt.fit(image)
+        clt.fit(image) # Output colors clusters of the image ( first 5 dominant colors)
 
-        no_color=0
-        for i in range (len(clt.cluster_centers_)):
+        for i in range (len(clt.cluster_centers_)): # loop in color clusters in the image.
+            #Check if there is a red color (red channel is 100 larger than each of green and blue channels and red channel >190
             if ( clt.cluster_centers_[i][0] > ( clt.cluster_centers_[i][1]+100) and ( clt.cluster_centers_[i][0] > clt.cluster_centers_[i][2])+100 ) and clt.cluster_centers_[i][0] >190 :
-                if (no_color==0):
-                    self.state=0
-                no_color=1
+                self.state=0
 
-
+            #Check if there is a yellow color (both green and blue channels are larger than 200 and blue channel <100    
             elif ( clt.cluster_centers_[i][0] > 200 and clt.cluster_centers_[i][1] > 200  and clt.cluster_centers_[i][2] < 100 ) :
-                if (no_color==0):
-                    self.state=1
-                no_color=1
-
+                self.state=1
+                
+            #Check if there is a green color (green channel is 100 larger than each of red and blue channels and green channel >190
             elif ( clt.cluster_centers_[i][1] > ( clt.cluster_centers_[i][0]+100) and ( clt.cluster_centers_[i][1] > clt.cluster_centers_[i][2])+100 ) and clt.cluster_centers_[i][1] >190 :
-                if (no_color==0):
-                    self.state=2
-                no_color=1
+                self.state=2
 
-        rospy.logwarn (str(self.state))
+        rospy.loginfo (str(self.state))
         return self.state
 
 
