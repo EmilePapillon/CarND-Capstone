@@ -16,9 +16,6 @@ class TLClassifier(object):
         cwd = os.path.dirname(os.path.realpath(__file__))
         print "path" , cwd
 
-        # load keras Lenet style model from file
-        # self.class_model = load_model(cwd+'/models/model.h5')
-        #        self.class_model = load_model('/home/hema/Udacity/System/Capstone/ros/src/tl_detector/light_classification/models/model.h5')
         self.class_graph = tf.get_default_graph()
 
         # detection graph
@@ -26,7 +23,7 @@ class TLClassifier(object):
         # load 
         with self.dg.as_default():
             gdef = tf.GraphDef()
-            with open("/home/hema/Udacity/System/Capstone/ros/src/tl_detector/light_classification/models/frozen_inference_graph.pb", 'rb') as f:
+            with open(cwd + "/models/frozen_inference_graph.pb", 'rb') as f:
                 gdef.ParseFromString( f.read() )
                 tf.import_graph_def( gdef, name="" )
 
@@ -57,10 +54,6 @@ class TLClassifier(object):
         if box is None:
             return TrafficLight.UNKNOWN
         class_image = cv2.resize( image[box[0]:box[2], box[1]:box[3]], (32,32) )
-        # file_name = '/home/hema/Udacity/System/Capstone/CAM/'+'-'+str(time.time())+'.jpg'
-        # name = '/home/hema/Udacity/System/Capstone/CAM/'+str(st)+'/'+str(time.time())+'.jpg'
-        # cv2.imwrite(name, class_image)
-        # pass
         
         return self.classify_lights( class_image )
 
@@ -127,10 +120,6 @@ class TLClassifier(object):
             detection_classes = np.squeeze(detection_classes)
             detection_scores  = np.squeeze(detection_scores)
 
-
-            #print(detection_classes)
-            #print(detection_scores)
-            #print(detection_boxes)
 
             ret = None
             detection_threshold = 0.4
