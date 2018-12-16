@@ -156,7 +156,4 @@ class TLClassifier(object):
 
 
 
-if __name__ == '__main__':
-    pass
-
 
