@@ -36,8 +36,18 @@ class TLClassifier(object):
 
         self.tlclasses = [ TrafficLight.RED, TrafficLight.YELLOW, TrafficLight.GREEN ]
         self.tlclasses_d = { TrafficLight.RED : "RED", TrafficLight.YELLOW:"YELLOW", TrafficLight.GREEN:"GREEN", TrafficLight.UNKNOWN:"UNKNOWN" }
+        path = os.getcwd()
+        
+        #getting no such file or directory error while trying to load model here :
+        
+        
 
-        pass
+        model_path = cwd+'/models/model.h5'
+        self.tlmodel = load_model(model_path)
+        if self.tlmodel :
+            rospy.loginfo('loaded model: '+model_path)
+        
+        
 
     def get_classification(self, image, st):
         """Determines the color of the traffic light in the image
@@ -57,7 +67,7 @@ class TLClassifier(object):
 
 
 
-    def classify_lights(self, image):
+    def classify_lights_old(self, image):
 
         """ Given a 32x32x3 image classifies it as red, greed or yellow
             Expects images in BGR format. Important otherwide won't classify correctly
@@ -97,12 +107,19 @@ class TLClassifier(object):
         rospy.loginfo (str(self.state))
         return self.state
 
+    def classify_lights(self,image):
+        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        rospy.loginfo(type(image))
+        rospy.loginfo(str(image.shape))
+        rospy.loginfo(image.dtype)
+        state = self.tlmodel.predict(np.array([image]))
+        return np.argmax(state)
 
     def localize_lights(self, image):
         """ Localizes bounding boxes for lights using pretrained TF model
             expects BGR8 image
         """
-
+        rospy.loginfo("call to localize_lights")
         with self.dg.as_default():
             #switch from BGR to RGB. Important otherwise detection won't work
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
