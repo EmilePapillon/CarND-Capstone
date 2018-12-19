@@ -69,7 +69,7 @@ class TLDetector(object):
         self.tl_detector_initialized_pub = rospy.Publisher('/tl_detector_initialized', Bool, queue_size=1)
 
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier()
+        self.light_classifier = TLClassifier(self.config['is_site'])
         self.listener = tf.TransformListener()
 
         self.tl_detector_initialized_pub.publish(Bool(True))

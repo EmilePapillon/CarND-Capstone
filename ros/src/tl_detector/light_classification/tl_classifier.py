@@ -12,7 +12,7 @@ from keras.utils import plot_model
 import time
 
 class TLClassifier(object):
-    def __init__(self):
+    def __init__(self, is_site):
         self.state = 0
         cwd = os.path.dirname(os.path.realpath(__file__))
         print "path" , cwd
@@ -28,7 +28,8 @@ class TLClassifier(object):
             #open keras classification model
             sess= tf.Session()
             K.set_session(sess)
-            self.class_model=load_model(cwd+'/models/model.h5')
+            model = 'carla_aug.h5' if is_site else 'model.h5'
+            self.class_model =load_model(cwd+'/models/'+model)
             self.session_cl = tf.Session(graph=self.cl )
 
         with self.dg.as_default():
@@ -118,7 +119,6 @@ class TLClassifier(object):
         """ Localizes bounding boxes for lights using pretrained TF model
             expects BGR8 image
         """
-        rospy.loginfo("call to localize_lights")
         with self.dg.as_default():
             #switch from BGR to RGB. Important otherwise detection won't work
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
