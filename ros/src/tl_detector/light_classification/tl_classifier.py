@@ -6,7 +6,9 @@ import cv2
 import numpy as np
 from glob import glob
 import os
+from keras import backend as K
 from keras.models import load_model
+from keras.utils import plot_model
 import time
 
 class TLClassifier(object):
@@ -20,14 +22,30 @@ class TLClassifier(object):
         # detection graph
         self.dg = tf.Graph()
         # load 
+        self.cl = tf.Graph()
+
+        with self.cl.as_default():
+            #open keras classification model
+            with tf.Session() as sess:
+                K.set_session(sess)
+                self.class_model=load_model(cwd+'/models/model.h5')
+
         with self.dg.as_default():
             gdef = tf.GraphDef()
             with open(cwd + "/models/frozen_inference_graph.pb", 'rb') as f:
                 gdef.ParseFromString( f.read() )
                 tf.import_graph_def( gdef, name="" )
 
+'''
+            model_path = cwd+'/models/model.h5'
+            self.tlmodel = load_model(model_path)
+            if self.tlmodel :
+                rospy.loginfo('loaded model: '+model_path)
+            plot_model(self.tlmodel, to_file='model.png')
+'''
             #get names of nodes. from https://www.activestate.com/blog/2017/08/using-pre-trained-models-tensorflow-go
-            self.session = tf.Session(graph=self.dg )
+            self.session_dg = tf.Session(graph=self.dg )
+            self.session_cl = tf.Session(graph=self.cl )
             self.image_tensor = self.dg.get_tensor_by_name('image_tensor:0')
             self.detection_boxes =  self.dg.get_tensor_by_name('detection_boxes:0')
             self.detection_scores = self.dg.get_tensor_by_name('detection_scores:0')
@@ -36,17 +54,10 @@ class TLClassifier(object):
 
         self.tlclasses = [ TrafficLight.RED, TrafficLight.YELLOW, TrafficLight.GREEN ]
         self.tlclasses_d = { TrafficLight.RED : "RED", TrafficLight.YELLOW:"YELLOW", TrafficLight.GREEN:"GREEN", TrafficLight.UNKNOWN:"UNKNOWN" }
-        path = os.getcwd()
         
         #getting no such file or directory error while trying to load model here :
         
-        
-
-        model_path = cwd+'/models/model.h5'
-        self.tlmodel = load_model(model_path)
-        if self.tlmodel :
-            rospy.loginfo('loaded model: '+model_path)
-        
+    
         
 
     def get_classification(self, image, st):
@@ -108,12 +119,13 @@ class TLClassifier(object):
         return self.state
 
     def classify_lights(self,image):
-        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        rospy.loginfo(type(image))
-        rospy.loginfo(str(image.shape))
-        rospy.loginfo(image.dtype)
-        state = self.tlmodel.predict(np.array([image]))
-        return np.argmax(state)
+        with self.cl.as_default():
+            #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            rospy.loginfo(type(image))
+            rospy.loginfo(str(image.shape))
+            rospy.loginfo(image.dtype)
+            state = self.session_cl.run(np.array([image]))
+            return np.argmax(state)
 
     def localize_lights(self, image):
         """ Localizes bounding boxes for lights using pretrained TF model
@@ -126,7 +138,7 @@ class TLClassifier(object):
 
             tf_image_input = np.expand_dims(image,axis=0)
             #run detection model
-            (detection_boxes, detection_scores, detection_classes, num_detections) = self.session.run(
+            (detection_boxes, detection_scores, detection_classes, num_detections) = self.session_dg.run(
                     [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
                     feed_dict={self.image_tensor: tf_image_input})
 
