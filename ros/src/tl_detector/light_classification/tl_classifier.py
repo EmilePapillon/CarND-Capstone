@@ -62,7 +62,11 @@ class TLClassifier(object):
         if box is None:
             return TrafficLight.UNKNOWN
         class_image = cv2.resize( image[box[0]:box[2], box[1]:box[3]], (32,32) )
-        return self.classify_lights( class_image )
+        light_state =  self.classify_lights( class_image )
+        #debug comments
+        colors = ['red','yellow','green']
+        rospy.loginfo('Detected light is classified as '+colors[light_state])
+        return light_state
 
 
 
