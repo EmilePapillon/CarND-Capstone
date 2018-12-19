@@ -21,14 +21,15 @@ class TLClassifier(object):
 
         # detection graph
         self.dg = tf.Graph()
-        # load 
+        # classification graph 
         self.cl = tf.Graph()
 
         with self.cl.as_default():
             #open keras classification model
-            with tf.Session() as sess:
-                K.set_session(sess)
-                self.class_model=load_model(cwd+'/models/model.h5')
+            sess= tf.Session()
+            K.set_session(sess)
+            self.class_model=load_model(cwd+'/models/model.h5')
+            self.session_cl = tf.Session(graph=self.cl )
 
         with self.dg.as_default():
             gdef = tf.GraphDef()
@@ -36,16 +37,7 @@ class TLClassifier(object):
                 gdef.ParseFromString( f.read() )
                 tf.import_graph_def( gdef, name="" )
 
-'''
-            model_path = cwd+'/models/model.h5'
-            self.tlmodel = load_model(model_path)
-            if self.tlmodel :
-                rospy.loginfo('loaded model: '+model_path)
-            plot_model(self.tlmodel, to_file='model.png')
-'''
-            #get names of nodes. from https://www.activestate.com/blog/2017/08/using-pre-trained-models-tensorflow-go
             self.session_dg = tf.Session(graph=self.dg )
-            self.session_cl = tf.Session(graph=self.cl )
             self.image_tensor = self.dg.get_tensor_by_name('image_tensor:0')
             self.detection_boxes =  self.dg.get_tensor_by_name('detection_boxes:0')
             self.detection_scores = self.dg.get_tensor_by_name('detection_scores:0')
@@ -54,11 +46,6 @@ class TLClassifier(object):
 
         self.tlclasses = [ TrafficLight.RED, TrafficLight.YELLOW, TrafficLight.GREEN ]
         self.tlclasses_d = { TrafficLight.RED : "RED", TrafficLight.YELLOW:"YELLOW", TrafficLight.GREEN:"GREEN", TrafficLight.UNKNOWN:"UNKNOWN" }
-        
-        #getting no such file or directory error while trying to load model here :
-        
-    
-        
 
     def get_classification(self, image, st):
         """Determines the color of the traffic light in the image
@@ -121,10 +108,10 @@ class TLClassifier(object):
     def classify_lights(self,image):
         with self.cl.as_default():
             #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            rospy.loginfo(type(image))
-            rospy.loginfo(str(image.shape))
-            rospy.loginfo(image.dtype)
-            state = self.session_cl.run(np.array([image]))
+            #rospy.loginfo(type(image))
+            #rospy.loginfo(str(image.shape))
+            #rospy.loginfo(image.dtype)
+            state = self.class_model.predict(np.array([image]))
             return np.argmax(state)
 
     def localize_lights(self, image):
