@@ -3,15 +3,17 @@
 ## Self-Driving Car Engineer Nanodegree Capstone project
 ### Team "Udanomous"
 
-Team members : 
+Team members :
+ 
 | Name          | email                     |
-| ------------- |:-------------------------:|
+| ------------- | ------------------------- |
 | Mahmoud Kamel | mahmoudkamel2014@gmail.com|
 | Longxing Tan  | longxing.tan@daimler.com  |
 | Khaled Zoheir | khaled.zoheir.kz@gmail.com|
 | Emile Papillon| epapillon@live.ca         | 
 
 Version 
+
 | Version       | details          |
 | ------------- |:----------------:|
 | v1.0          | first submission |
