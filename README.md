@@ -10,7 +10,7 @@
 ## Self-Driving Car Engineer Nanodegree Capstone project
 ### Team "Udanomous"
 
-* Team members : *
+_Team members :_
  
 | Name          | email                     |
 | ------------- | ------------------------- |
@@ -19,7 +19,7 @@
 | Khaled Zoheir | khaled.zoheir.kz@gmail.com|
 | Emile Papillon| epapillon@live.ca         | 
 
-* Version * 
+_Version_
 
 | Version       | details          |
 | ------------- |:----------------:|
