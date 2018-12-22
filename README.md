@@ -38,16 +38,16 @@ Some code or data was used from the web . The following websites were the source
 
 ### ROS System Architecture
 
-The following figure shows the architecture implemented, as suggested by Udacity. It contains a * perception * subsystem consisting of the following nodes:
+The following figure shows the architecture implemented, as suggested by Udacity. It contains a _perception_ subsystem consisting of the following nodes:
  
 * Traffic light detection : Responsible of detecting traffic lights and classifying them. If the light is green, the car is free to circulate. Otherwise it must stop. The TL-Detector publishes the waypoint where the traffic lights are detected and the state of the traffic lights.  
 
-The * Planning * subsystem contains the following nodes :
+The _Planning_ subsystem contains the following nodes :
 
 * Waypoint loader : Initially, waypoints are published and loaded into the self-driving car system by the waypoint loader.
 * Waypoint updater node : This node provides a set of 50 waypoints to be driven in front of the vehicle. The waypoint updater node is also responsible to take the traffic light waypoints and ramp-down the target velocity to stop at a target waypoint in case a red light is detected. 
 
-Finally, the * Control * subsystem consists of :
+Finally, the _Control_ subsystem consists of :
 
 * Waypoint follower node : The waypoint follower provides target states for each waypoints. It is implemented as a pure-pursuit algorithm and provided by Autoware (see copyrights notice at the beginning of this document)
 
