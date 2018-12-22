@@ -17,6 +17,7 @@ _Team members :_
 | Mahmoud Kamel | mahmoudkamel2014@gmail.com|
 | Longxing Tan  | longxing.tan@daimler.com  |
 | Khaled Zoheir | khaled.zoheir.kz@gmail.com|
+| Chun Hsien Ho | Steveho183532@gmail.com   |
 | Emile Papillon| epapillon@live.ca         | 
 
 _Version_
