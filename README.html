@@ -1,0 +1,224 @@
+<h1>Programming a real self-driving car</h1>
+
+<h2>Self-Driving Car Engineer Nanodegree Capstone project</h2>
+
+<h3>Team "Udanomous"</h3>
+
+<p>Team members : 
+| Name          | email                     |
+| ------------- |:-------------------------:|
+| Mahmoud Kamel | mahmoudkamel2014@gmail.com|
+| Longxing Tan  | longxing.tan@daimler.com  |
+| Khaled Zoheir | khaled.zoheir.kz@gmail.com|
+| Emile Papillon| epapillon@live.ca         | </p>
+
+<p>Version 
+| Version       | details          |
+| ------------- |:----------------:|
+| v1.0          | first submission |</p>
+
+<h2>Programming a self-driving car : implementation</h2>
+
+<h2>Udacity Original README.md file contents</h2>
+
+<p>This is the project repo for the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. For more information about the project, see the project introduction <a href="https://classroom.udacity.com/nanodegrees/nd013/parts/6047fe34-d93c-4f50-8336-b70ef10cb4b2/modules/e1a23b06-329a-4684-a717-ad476f0d8dff/lessons/462c933d-9f24-42d3-8bdc-a08a5fc866e4/concepts/5ab4b122-83e6-436d-850f-9f4d26627fd9">here</a>.</p>
+
+<p>Please use <strong>one</strong> of the two installation options, either native <strong>or</strong> docker installation.</p>
+
+<h3>Native Installation</h3>
+
+<ul>
+<li>Be sure that your workstation is running Ubuntu 16.04 Xenial Xerus or Ubuntu 14.04 Trusty Tahir. <a href="https://www.ubuntu.com/download/desktop">Ubuntu downloads can be found here</a>.</li>
+<li><p>If using a Virtual Machine to install Ubuntu, use the following configuration as minimum:</p>
+
+<ul>
+<li>2 CPU</li>
+<li>2 GB system memory</li>
+<li>25 GB of free hard drive space</li>
+</ul>
+
+<p>The Udacity provided virtual machine has ROS and Dataspeed DBW already installed, so you can skip the next two steps if you are using this.</p></li>
+<li><p>Follow these instructions to install ROS</p>
+
+<ul>
+<li><a href="http://wiki.ros.org/kinetic/Installation/Ubuntu">ROS Kinetic</a> if you have Ubuntu 16.04.</li>
+<li><a href="http://wiki.ros.org/indigo/Installation/Ubuntu">ROS Indigo</a> if you have Ubuntu 14.04.</li>
+</ul></li>
+<li><a href="https://bitbucket.org/DataspeedInc/dbw_mkz_ros">Dataspeed DBW</a>
+<ul>
+<li>Use this option to install the SDK on a workstation that already has ROS installed: <a href="https://bitbucket.org/DataspeedInc/dbw_mkz_ros/src/81e63fcc335d7b64139d7482017d6a97b405e250/ROS_SETUP.md?fileviewer=file-view-default">One Line SDK Install (binary)</a></li>
+</ul></li>
+<li>Download the <a href="https://github.com/udacity/CarND-Capstone/releases">Udacity Simulator</a>.</li>
+</ul>
+
+<h3>Docker Installation</h3>
+
+<p><a href="https://docs.docker.com/engine/installation/">Install Docker</a></p>
+
+<p>Build the docker container
+<code>bash
+docker build . -t capstone
+</code></p>
+
+<p>Run the docker file
+<code>bash
+docker run -p 4567:4567 -v $PWD:/capstone -v /tmp/log:/root/.ros/ --rm -it capstone
+</code></p>
+
+<h3>Port Forwarding</h3>
+
+<p>To set up port forwarding, please refer to the <a href="https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/16cf4a78-4fc7-49e1-8621-3450ca938b77">instructions from term 2</a></p>
+
+<h3>Usage</h3>
+
+<ol>
+<li><p>Clone the project repository
+<code>bash
+git clone https://github.com/udacity/CarND-Capstone.git
+</code></p></li>
+<li><p>Install python dependencies
+<code>bash
+cd CarND-Capstone
+pip install -r requirements.txt
+</code></p></li>
+<li>Make and run styx
+<code>bash
+cd ros
+catkin_make
+source devel/setup.sh
+roslaunch launch/styx.launch
+</code></li>
+<li>Run the simulator</li>
+</ol>
+
+<h3>Real world testing</h3>
+
+<ol>
+<li>Download <a href="https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/traffic_light_bag_file.zip">training bag</a> that was recorded on the Udacity self-driving car.</li>
+<li>Unzip the file
+<code>bash
+unzip traffic_light_bag_file.zip
+</code></li>
+<li>Play the bag file
+<code>bash
+rosbag play -l traffic_light_bag_file/traffic_light_training.bag
+</code></li>
+<li>Launch your project in site mode
+<code>bash
+cd CarND-Capstone/ros
+roslaunch launch/site.launch
+</code></li>
+<li>Confirm that traffic light detection works on real life images</li>
+</ol>
+<h1>Programming a real self-driving car</h1>
+
+<h2>Self-Driving Car Engineer Nanodegree Capstone project</h2>
+
+<h3>Team "Udanomous"</h3>
+
+<p>Team members : 
+| Name          | email                     |
+| ------------- |:-------------------------:|
+| Mahmoud Kamel | mahmoudkamel2014@gmail.com|
+| Longxing Tan  | longxing.tan@daimler.com  |
+| Khaled Zoheir | khaled.zoheir.kz@gmail.com|
+| Emile Papillon| epapillon@live.ca         | </p>
+
+<p>Version 
+| Version       | details          |
+| ------------- |:----------------:|
+| v1.0          | first submission |</p>
+
+<h2>Programming a self-driving car : implementation</h2>
+
+<h2>Udacity Original README.md file contents</h2>
+
+<p>This is the project repo for the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. For more information about the project, see the project introduction <a href="https://classroom.udacity.com/nanodegrees/nd013/parts/6047fe34-d93c-4f50-8336-b70ef10cb4b2/modules/e1a23b06-329a-4684-a717-ad476f0d8dff/lessons/462c933d-9f24-42d3-8bdc-a08a5fc866e4/concepts/5ab4b122-83e6-436d-850f-9f4d26627fd9">here</a>.</p>
+
+<p>Please use <strong>one</strong> of the two installation options, either native <strong>or</strong> docker installation.</p>
+
+<h3>Native Installation</h3>
+
+<ul>
+<li>Be sure that your workstation is running Ubuntu 16.04 Xenial Xerus or Ubuntu 14.04 Trusty Tahir. <a href="https://www.ubuntu.com/download/desktop">Ubuntu downloads can be found here</a>.</li>
+<li><p>If using a Virtual Machine to install Ubuntu, use the following configuration as minimum:</p>
+
+<ul>
+<li>2 CPU</li>
+<li>2 GB system memory</li>
+<li>25 GB of free hard drive space</li>
+</ul>
+
+<p>The Udacity provided virtual machine has ROS and Dataspeed DBW already installed, so you can skip the next two steps if you are using this.</p></li>
+<li><p>Follow these instructions to install ROS</p>
+
+<ul>
+<li><a href="http://wiki.ros.org/kinetic/Installation/Ubuntu">ROS Kinetic</a> if you have Ubuntu 16.04.</li>
+<li><a href="http://wiki.ros.org/indigo/Installation/Ubuntu">ROS Indigo</a> if you have Ubuntu 14.04.</li>
+</ul></li>
+<li><a href="https://bitbucket.org/DataspeedInc/dbw_mkz_ros">Dataspeed DBW</a>
+<ul>
+<li>Use this option to install the SDK on a workstation that already has ROS installed: <a href="https://bitbucket.org/DataspeedInc/dbw_mkz_ros/src/81e63fcc335d7b64139d7482017d6a97b405e250/ROS_SETUP.md?fileviewer=file-view-default">One Line SDK Install (binary)</a></li>
+</ul></li>
+<li>Download the <a href="https://github.com/udacity/CarND-Capstone/releases">Udacity Simulator</a>.</li>
+</ul>
+
+<h3>Docker Installation</h3>
+
+<p><a href="https://docs.docker.com/engine/installation/">Install Docker</a></p>
+
+<p>Build the docker container
+<code>bash
+docker build . -t capstone
+</code></p>
+
+<p>Run the docker file
+<code>bash
+docker run -p 4567:4567 -v $PWD:/capstone -v /tmp/log:/root/.ros/ --rm -it capstone
+</code></p>
+
+<h3>Port Forwarding</h3>
+
+<p>To set up port forwarding, please refer to the <a href="https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/16cf4a78-4fc7-49e1-8621-3450ca938b77">instructions from term 2</a></p>
+
+<h3>Usage</h3>
+
+<ol>
+<li><p>Clone the project repository
+<code>bash
+git clone https://github.com/udacity/CarND-Capstone.git
+</code></p></li>
+<li><p>Install python dependencies
+<code>bash
+cd CarND-Capstone
+pip install -r requirements.txt
+</code></p></li>
+<li>Make and run styx
+<code>bash
+cd ros
+catkin_make
+source devel/setup.sh
+roslaunch launch/styx.launch
+</code></li>
+<li>Run the simulator</li>
+</ol>
+
+<h3>Real world testing</h3>
+
+<ol>
+<li>Download <a href="https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/traffic_light_bag_file.zip">training bag</a> that was recorded on the Udacity self-driving car.</li>
+<li>Unzip the file
+<code>bash
+unzip traffic_light_bag_file.zip
+</code></li>
+<li>Play the bag file
+<code>bash
+rosbag play -l traffic_light_bag_file/traffic_light_training.bag
+</code></li>
+<li>Launch your project in site mode
+<code>bash
+cd CarND-Capstone/ros
+roslaunch launch/site.launch
+</code></li>
+<li>Confirm that traffic light detection works on real life images</li>
+</ol>
