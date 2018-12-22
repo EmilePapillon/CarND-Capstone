@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import Int32, Bool
+from std_msgs.msg import Int32, Bool,Header, Float64
 from geometry_msgs.msg import PoseStamped, Pose
 from styx_msgs.msg import TrafficLightArray, TrafficLight
 from styx_msgs.msg import Lane
@@ -51,7 +51,7 @@ class TLDetector(object):
         # Manually set buffer size to reduce subscriber lag; ~32MB seems to work
         # https://answers.ros.org/question/220502/image-subscriber-lag-despite-queue-1/
         sub6 = rospy.Subscriber('/image_color', Image, self.image_cb, queue_size=1, buff_size=2**25)
-        sub7 = rospy.Subscriber('/image_raw', Image, self.test_image_cb)
+        #sub7 = rospy.Subscriber('/image_raw', Image, self.test_image_cb)
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
@@ -69,7 +69,7 @@ class TLDetector(object):
         self.tl_detector_initialized_pub = rospy.Publisher('/tl_detector_initialized', Bool, queue_size=1)
 
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier()
+        self.light_classifier = TLClassifier(self.config['is_site'])
         self.listener = tf.TransformListener()
 
         self.tl_detector_initialized_pub.publish(Bool(True))
@@ -166,7 +166,10 @@ class TLDetector(object):
                     wp_vector = PyKDL.Vector( wpp.x-pose.position.x, wpp.y-pose.position.y, 0 )
 
                     #dot product is the cosinus of angle between both
-                    angle = np.arccos( PyKDL.dot( car_vector, wp_vector ) / car_vector.Norm() / wp_vector.Norm() )
+                    if car_vector.Norm() != 0 and wp_vector.Norm() != 0 :
+                        angle = np.arccos( PyKDL.dot( car_vector, wp_vector ) / car_vector.Norm() / wp_vector.Norm() )
+                    else:
+                        angle = 0
 
                     if angle < np.pi/2:
                         min_dist = dist
@@ -221,8 +224,16 @@ class TLDetector(object):
         # 2. Find the stop_line_position before such traffic signal position
         # 3. Find the waypoint just before and this stop_line_position 
 
-        if self.pose is None or self.waypoints is None or self.light_classifier is None:
+        if  self.waypoints is None or self.light_classifier is None:
+            rospy.loginfo("Aborting process_traffic_light. Either no waypoints or no classifyier found.")
             return -1, TrafficLight.UNKNOWN
+
+        if self.pose is None:
+            self.pose = PoseStamped()
+            self.pose.pose.position.x  = 0
+            self.pose.pose.position.y  = 0
+            self.pose.pose.position.z  = 0 
+            rospy.loginfo('Artificially set pose to zero')
 
 
         #TODO find the closest visible traffic light (if one exists)
