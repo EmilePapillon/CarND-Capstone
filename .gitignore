@@ -8,3 +8,4 @@ profile.tmp
 
 ml_model
 README.html
+ros/src/tl_detector/light_classification/model
